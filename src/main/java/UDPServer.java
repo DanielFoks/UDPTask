@@ -2,15 +2,13 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-class UDPServer
-{
-    public static void main(String args[]) throws Exception
-    {
+class UDPServer {
+
+    public static void main(String args[]) throws Exception {
         DatagramSocket serverSocket = new DatagramSocket(14521);
         byte[] receiveData;
         byte[] sendData;
-        while(true)
-        {
+        while (true) {
             receiveData = new byte[1024];
             DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
             serverSocket.receive(receivePacket);

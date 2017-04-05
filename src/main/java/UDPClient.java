@@ -1,19 +1,12 @@
 import java.io.*;
 import java.net.*;
 
-class UDPClient
-{
-    public static void main(String args[]) throws Exception
-    {
-        while (true) {
-            BufferedReader inFromUser =
-                    new BufferedReader(new InputStreamReader(System.in));
+class UDPClient {
+
+    private String message;
+
+    public UDPClient(String sentence) throws IOException {
             DatagramSocket clientSocket = new DatagramSocket();
-            String sentence = inFromUser.readLine();
-            if (sentence.equals("exit")){
-                System.out.println("GOODBYE");
-                break;
-            }
             InetAddress IPAddress = InetAddress.getByName("localhost");
             byte[] sendData;
             byte[] receiveData = new byte[1024];
@@ -22,9 +15,13 @@ class UDPClient
             clientSocket.send(sendPacket);
             DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
             clientSocket.receive(receivePacket);
-            String modifiedSentence =  new String(receivePacket.getData());
+            String modifiedSentence = new String(receivePacket.getData());
             System.out.println("FROM SERVER:" + modifiedSentence);
+            message = modifiedSentence.trim();
             clientSocket.close();
-        }
+    }
+
+    public String getMessage() {
+        return message;
     }
 }
