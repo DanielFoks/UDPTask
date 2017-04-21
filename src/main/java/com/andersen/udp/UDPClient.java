@@ -7,57 +7,58 @@ import java.io.*;
 import java.net.*;
 
 /**
- * This class is UDP client
+ * This class is UDP client.
  */
 class UDPClient implements UDPClientInterface {
 
     /**
-     * log4j logger
+     * log4j logger.
      */
     private static final Logger log = Logger.getLogger(UDPClient.class);
 
     /**
-     * Socket for receive and sent messages
+     * Socket for receive and sent messages.
      */
-    private DatagramSocket clientSocket;
+    private final DatagramSocket clientSocket;
 
     /**
-     * The server port for receive and sent messages
+     * The server port for receive and sent messages.
      */
-    private int port;
+    private final int port;
 
     /**
-     * The server address for receive and sent messages
+     * The server address for receive and sent messages.
      */
-    private InetAddress inetAddress;
+    private final InetAddress inetAddress;
 
-    public UDPClient() {
-    }
+    public UDPClient(InetAddress inetAddress, int port) {
 
-    /**
-     * @param port        The server port for receive and sent messages
-     * @param inetAddress The server address for receive and sent messages
-     * @return Socket for receive and sent messages
-     */
-    @Override
-    public DatagramSocket createConnection(int port, InetAddress inetAddress) {
+        DatagramSocket clientSocket1;
+
         try {
-            clientSocket = new DatagramSocket();
-            this.port = port;
-            this.inetAddress = inetAddress;
+            clientSocket1 = new DatagramSocket();
             log.info("Socket was created");
+
         } catch (SocketException e) {
+            clientSocket1 = null;
             log.error("Can not create socket: " + e.getMessage(), e);
         }
-        return clientSocket;
+
+        this.clientSocket = clientSocket1;
+        this.inetAddress = inetAddress;
+        this.port = port;
+
     }
 
-
     /**
-     * @param message Message to be sent
+     * Sends message to server.
+     *
+     * @param message Message to be sent.
+     * @return if message was sent. False if was not.
+     * @throws IOException if message can not be sent.
      */
     @Override
-    public void sendMessage(String message) {
+    public boolean sendMessage(String message) {
         byte[] sendData = message.getBytes();
         DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, inetAddress, port);
         try {
@@ -65,27 +66,50 @@ class UDPClient implements UDPClientInterface {
             if (log.isDebugEnabled()) {
                 log.debug("Message: \"" + message + "\"" + " was sent");
             }
+            return true;
         } catch (IOException e) {
             log.error("Message can not be sent: " + e.getMessage(), e);
+            return false;
         }
     }
 
     /**
-     * @return Message that was sent
+     * Receives packet from server.
+     *
+     * @return Message that was sent.
+     * @throws IOException if message can not be received.
      */
     @Override
-    public String receiveMessage() {
+    public DatagramPacket receivePacket() {
         byte[] receiveData = new byte[1024];
         DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-        String receivedMessage = null;
+
         try {
             clientSocket.receive(receivePacket);
-            receivedMessage = new String(receivePacket.getData());
             if (log.isDebugEnabled()) {
-                log.debug("Message: \"" + receivedMessage + "\"" + " was received from " + receivePacket.getAddress());
+                log.debug("Packet: was received from " + receivePacket.getAddress());
             }
+            return receivePacket;
         } catch (IOException e) {
             log.error("Message can not be received: " + e.getMessage(), e);
+            return null;
+        }
+    }
+
+    /**
+     * Get message from packet.
+     *
+     * @param datagramPacket The packet from which the message will be received.
+     * @return Message from packet.
+     */
+    @Override
+    public String getMessage(DatagramPacket datagramPacket) {
+        String receivedMessage = null;
+        if (datagramPacket != null) {
+            receivedMessage = new String(datagramPacket.getData());
+            if (log.isDebugEnabled()) {
+                log.debug("Message: \"" + receivedMessage + "\"" + " was received from DatagramPacket");
+            }
         }
         return receivedMessage;
     }

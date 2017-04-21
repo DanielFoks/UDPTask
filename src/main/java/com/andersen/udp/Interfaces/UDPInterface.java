@@ -1,29 +1,36 @@
 package com.andersen.udp.Interfaces;
 
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-
+import java.io.IOException;
+import java.net.DatagramPacket;
 
 /**
- * This interface includes basic methods for working with the server and the client
+ * Methods for working with the server and the client.
  */
 public interface UDPInterface {
 
     /**
-     * @param port        Port for connection
-     * @param inetAddress Address for connection
-     * @return Socket for work
+     * Sends message to server or client.
+     *
+     * @param message Message to be sent.
+     * @return if message was sent. False if was not.
+     * @throws IOException if message can not be sent.
      */
-    DatagramSocket createConnection(int port, InetAddress inetAddress);
+    boolean sendMessage(String message);
 
     /**
-     * @param message Message to be sent
+     * Receives packet from server or client.
+     *
+     * @return Message that was sent.
+     * @throws IOException if message can not be received.
      */
-    void sendMessage(String message);
+    DatagramPacket receivePacket();
 
     /**
-     * @return Message that was sent
+     * Get message from packet.
+     *
+     * @param datagramPacket The packet from which the message will be received.
+     * @return Message from packet.
      */
-    String receiveMessage();
+    String getMessage(DatagramPacket datagramPacket);
 
 }

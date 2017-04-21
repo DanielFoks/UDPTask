@@ -1,7 +1,7 @@
 package com.andersen.udp.Interfaces;
 
 /**
- * This interface for server
+ * UDP server interface.
  */
 public interface UDPServerInterface extends UDPInterface {
 

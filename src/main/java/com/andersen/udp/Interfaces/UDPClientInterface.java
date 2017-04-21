@@ -2,7 +2,7 @@ package com.andersen.udp.Interfaces;
 
 
 /**
- * This interface for client
+ * UDP client interface.
  */
 public interface UDPClientInterface extends UDPInterface {
 

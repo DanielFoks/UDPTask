@@ -14,30 +14,30 @@ public class UDPTest {
 
     @Before
     public void testConnectionServer() throws UnknownHostException {
-        UDPServer udpServer = new UDPServer();
-        udpServer.createConnection(14522, InetAddress.getByName("localhost"));
+        UDPServer udpServer = new UDPServer(14522);
         udpServer.start();
     }
 
     @Test
-    public void testReceivedMessage() {
+    public void testReceivedMessage(){
 
         ExecutorService executor = Executors.newFixedThreadPool(10);
         for (int i = 0; i < 1000; i++) {
 
             executor.execute(() -> {
-                UDPClient udpClient = new UDPClient();
+                UDPClient udpClient = null;
                 try {
-                    udpClient.createConnection(14522, InetAddress.getByName("localhost"));
+                    udpClient = new UDPClient(InetAddress.getByName("localhost"),14522);
                 } catch (UnknownHostException e) {
                     e.printStackTrace();
                 }
 
                 String message = String.valueOf((Math.random() * 100));
 
+                assert udpClient != null;
                 udpClient.sendMessage(message);
 
-                Assert.assertEquals(message, udpClient.receiveMessage().trim());
+                Assert.assertEquals(message, udpClient.getMessage(udpClient.receivePacket()).trim());
             });
         }
         executor.shutdown();
