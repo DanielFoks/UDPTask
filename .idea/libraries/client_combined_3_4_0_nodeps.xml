@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="client-combined-3.4.0-nodeps">
+    <CLASSES>
+      <root url="jar://D:/Downloads/new/phantomjs-2.1.1-windows/bin/client-combined-3.4.0-nodeps.jar!/" />
+      <root url="file://D:/Downloads/new/phantomjs-2.1.1-windows/bin/lib" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://D:/Downloads/new/phantomjs-2.1.1-windows/bin/lib" recursive="false" />
+  </library>
+</component>

@@ -124,4 +124,11 @@ class UDPServer extends Thread implements UDPServerInterface {
         }
         return receivedMessage;
     }
+
+    @Override
+    public void closeSocket() {
+
+    }
+
+
 }

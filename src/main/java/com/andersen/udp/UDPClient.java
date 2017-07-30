@@ -113,4 +113,9 @@ class UDPClient implements UDPClientInterface {
         }
         return receivedMessage;
     }
+
+    @Override
+    public void closeSocket() {
+
+    }
 }

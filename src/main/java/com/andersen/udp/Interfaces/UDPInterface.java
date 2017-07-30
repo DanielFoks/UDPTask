@@ -33,4 +33,7 @@ public interface UDPInterface {
      */
     String getMessage(DatagramPacket datagramPacket);
 
+
+    void closeSocket();
+
 }
